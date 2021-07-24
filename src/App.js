@@ -1,8 +1,11 @@
 import "./App.css";
 import Canvas from "./components/Canvas";
 import ControlPanel from "./components/ControlPanel";
+import { useState } from "react";
 
 function App() {
+  const [points, setPoints] = useState([]);
+
   return (
     <div className="App">
       <header className="App-header">
@@ -10,7 +13,7 @@ function App() {
       </header>
       <main>
         <ControlPanel />
-        <Canvas />
+        <Canvas points={points} setPoints={setPoints} />
       </main>
     </div>
   );
