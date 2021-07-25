@@ -1,6 +1,6 @@
 // NOT ALL COLORS!!
 
-export default [
+const COLORS = [
   "AliceBlue",
   "AntiqueWhite",
   "Aqua",
@@ -148,3 +148,5 @@ export default [
   "Yellow",
   "YellowGreen",
 ];
+
+export default COLORS;
