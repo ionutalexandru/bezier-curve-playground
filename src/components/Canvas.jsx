@@ -1,11 +1,7 @@
-import "./Canvas.css";
-import COLORS from "../constants/colors";
 import { useEffect, useRef, useState } from "react";
-
-function getRandomColor(usedColors) {
-  const remainingColors = COLORS.filter((color) => !usedColors.includes(color));
-  return remainingColors[Math.floor(Math.random() * remainingColors.length)];
-}
+import { CONTROL_POINT_SETTINGS, TANGENT_LINE_SETTINGS } from "../settings";
+import { useWindowSize } from "../hooks";
+import Icon from "./icons/Bin";
 
 function createSVGPoint(clientX, clientY, svg) {
   const pt = svg.createSVGPoint();
@@ -16,11 +12,10 @@ function createSVGPoint(clientX, clientY, svg) {
   return pt.matrixTransform(svg.getScreenCTM().inverse());
 }
 
-const DOT_RADIUS = "0.1rem";
-
 export default function Canvas({ points = [], setPoints }) {
   const svgRef = useRef(null);
   const [svg, setSvg] = useState(null);
+  const { width, height } = useWindowSize();
   const [selectedNode, setSelectedNode] = useState(null);
 
   useEffect(() => {
@@ -34,8 +29,7 @@ export default function Canvas({ points = [], setPoints }) {
     const { x, y } = createSVGPoint(clientX, clientY, svg);
     const position = points.length;
     const id = position;
-    const color = getRandomColor(points.map(({ color }) => color));
-    setPoints((points) => [...points, { id, x, y, position, color }]);
+    setPoints((points) => [...points, { id, x, y, position }]);
   };
 
   const handleClearCanvas = () => {
@@ -68,52 +62,58 @@ export default function Canvas({ points = [], setPoints }) {
       .join(" ");
   };
 
+  const getSVGViewBox = () =>
+    width && height ? `0 0 ${width} ${height}` : "0 0 100 100";
+
   return (
-    <div className="Canvas">
-      <div className="CanvasWrapper">
-        <svg
-          width="100%"
-          height="100%"
-          viewBox="0 0 100 100"
-          onClick={handleOnClickCanvas}
-          ref={svgRef}
-          onMouseMove={handleOnMouseMove}
-        >
-          {points.slice(0, points.length - 1).map(({ id, x, y }, index) => (
-            <line
-              key={`line-${id}`}
-              x1={x}
-              y1={y}
-              x2={points[index + 1].x}
-              y2={points[index + 1].y}
-              stroke="Gray"
-              strokeWidth={0.25}
-            />
-          ))}
-          {points.length === 1 ? null : (
-            <path
-              d={getBezierPath()}
-              stroke="black"
-              strokeWidth={0.5}
-              fill="none"
-            />
-          )}
-          {points.map(({ id, x, y, color }) => (
-            <circle
-              key={`circle-${id}`}
-              cx={x}
-              cy={y}
-              r={DOT_RADIUS}
-              fill={color}
-              onMouseDown={() => setSelectedNode(id)}
-              onMouseUp={() => setSelectedNode(null)}
-              className={id === selectedNode ? "grabbing" : null}
-            />
-          ))}
-        </svg>
-      </div>
-      <button onClick={handleClearCanvas} className="ClearButton">
-        Clear
+    <div className="flex-1 h-full bg-gray-50">
+      <svg
+        width="100%"
+        height="100%"
+        viewBox={getSVGViewBox()}
+        onClick={handleOnClickCanvas}
+        ref={svgRef}
+        onMouseMove={handleOnMouseMove}
+      >
+        {points.slice(0, points.length - 1).map(({ id, x, y }, index) => (
+          <line
+            key={`line-${id}`}
+            x1={x}
+            y1={y}
+            x2={points[index + 1].x}
+            y2={points[index + 1].y}
+            stroke={TANGENT_LINE_SETTINGS.stroke}
+            strokeWidth={TANGENT_LINE_SETTINGS.strokeWidth}
+          />
+        ))}
+        {points.length === 1 ? null : (
+          <path
+            d={getBezierPath()}
+            stroke="black"
+            strokeWidth={2}
+            fill="none"
+          />
+        )}
+        {points.map(({ id, x, y }) => (
+          <circle
+            key={`circle-${id}`}
+            cx={x}
+            cy={y}
+            r={CONTROL_POINT_SETTINGS.radius}
+            fill={CONTROL_POINT_SETTINGS.fill}
+            stroke={CONTROL_POINT_SETTINGS.stroke}
+            strokeWidth={CONTROL_POINT_SETTINGS.strokeWidth}
+            onMouseDown={() => setSelectedNode(id)}
+            onMouseUp={() => setSelectedNode(null)}
+            className={id === selectedNode ? "grabbing" : null}
+          />
+        ))}
+      </svg>
+      <button
+        onClick={handleClearCanvas}
+        className="absolute bottom-2 right-2 rounded-full bg-green-400 hover:bg-green-600 text-white p-2"
+      >
+        <Icon />
       </button>
     </div>
   );

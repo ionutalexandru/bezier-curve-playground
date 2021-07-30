@@ -1,20 +1,17 @@
 import "./App.css";
 import Canvas from "./components/Canvas";
-import ControlPanel from "./components/ControlPanel";
 import { useState } from "react";
+import TopBar from "./components/TopBar";
+import { ACTIONS } from "./settings";
 
 function App() {
   const [points, setPoints] = useState([]);
+  const [action, setAction] = useState(ACTIONS.CLICK);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Bèzier Curve Playground</h1>
-      </header>
-      <main>
-        <ControlPanel />
-        <Canvas points={points} setPoints={setPoints} />
-      </main>
+    <div className="w-screen h-screen">
+      <TopBar action={action} setAction={setAction} />
+      <Canvas points={points} setPoints={setPoints} />
     </div>
   );
 }
