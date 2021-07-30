@@ -1,0 +1,44 @@
+.Canvas {
+  flex: 1;
+  width: 100%;
+  height: 95%;
+}
+
+.CanvasWrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.Canvas svg {
+  cursor: crosshair;
+}
+
+.Canvas svg circle {
+  cursor: grab;
+}
+
+.Canvas svg circle.grabbing {
+  cursor: grabbing;
+}
+
+.ClearButton {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background-color: Aquamarine;
+  box-shadow: 5px 5px 15px -2px rgba(0, 0, 0, 0.267);
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  cursor: pointer;
+  color: black;
+  font-weight: bold;
+}
+
+@media (max-width: 767.98px) {
+  .Canvas {
+    width: 100%;
+    box-shadow: none;
+  }
+}
