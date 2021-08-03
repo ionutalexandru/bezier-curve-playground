@@ -1,21 +1,44 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import svgUtils from "utils/svg";
+
+const { getViewBox } = svgUtils;
 
 export function useWindowSize() {
-  // Learn more here: https://joshwcomeau.com/react/the-perils-of-rehydration/
-  const [windowSize, setWindowSize] = useState({
-    width: undefined,
-    height: undefined,
-  });
+  const { innerWidth: width, innerHeight: height } = window;
+  const [windowSize, setWindowSize] = useState({ width, height });
+
   useEffect(() => {
-    function handleResize() {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    }
+    const handleResize = () => {
+      const { innerWidth: width, innerHeight: height } = window;
+
+      setWindowSize({ width, height });
+    };
+
     window.addEventListener("resize", handleResize);
-    handleResize();
+
     return () => window.removeEventListener("resize", handleResize);
   }, []);
   return windowSize;
+}
+
+export function useSVG(zoom = 1, x = null, y = null) {
+  const svgRef = useRef(null);
+  const [svg, setSVG] = useState(null);
+  const { width, height } = useWindowSize();
+  const initViewBox = getViewBox(width, height, zoom, x, y);
+  const [viewBox, setViewBox] = useState(initViewBox);
+
+  useEffect(() => {
+    const { current } = svgRef;
+    if (current) {
+      setSVG(current);
+    }
+  }, []);
+
+  useEffect(() => {
+    const viewBox = getViewBox(width, height, zoom, x, y);
+    setViewBox(viewBox);
+  }, [zoom, x, y]);
+
+  return { svgRef, svg, viewBox };
 }

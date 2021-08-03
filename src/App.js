@@ -1,17 +1,17 @@
 import "./App.css";
-import Canvas from "./components/Canvas";
+import { Canvas } from "components";
 import { useState } from "react";
-import TopBar from "./components/TopBar";
-import { ACTIONS } from "./settings";
+import { TopBar } from "components";
+import { ACTION_TYPES } from "settings";
 
 function App() {
   const [points, setPoints] = useState([]);
-  const [action, setAction] = useState(ACTIONS.CLICK);
+  const [action, setAction] = useState(ACTION_TYPES[0].id);
 
   return (
     <div className="w-screen h-screen">
       <TopBar action={action} setAction={setAction} />
-      <Canvas points={points} setPoints={setPoints} />
+      <Canvas action={action} points={points} setPoints={setPoints} />
     </div>
   );
 }

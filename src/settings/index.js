@@ -10,9 +10,21 @@ export const TANGENT_LINE_SETTINGS = {
   strokeWidth: 2,
 };
 
-export const ACTIONS = {
-  CLICK: "CLICK",
-  CIRCLE: "CIRCLE",
-  LINE: "LINE",
-  BEZIER: "BEZIER",
-};
+export const ACTION_TYPES = [
+  {
+    id: "CLICK",
+  },
+  {
+    id: "CIRCLE",
+  },
+  {
+    id: "LINE",
+  },
+  {
+    id: "BEZIER",
+  },
+];
+
+export const ZOOM_DIFF = 0.1;
+export const MAX_ZOOM = 2;
+export const MIN_ZOOM = 0.1;

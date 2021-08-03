@@ -1,15 +1,15 @@
-import { ACTIONS } from "../settings";
-import CircleIcon from "./icons/Circle";
-import CurvedLineIcon from "./icons/CurvedLine";
-import LineIcon from "./icons/Line";
-import ClickIcon from "./icons/Click";
+import { ACTION_TYPES } from "settings";
+import CircleIcon from "Icons/Circle";
+import CurvedLineIcon from "Icons/CurvedLine";
+import LineIcon from "Icons/Line";
+import ClickIcon from "Icons/Click";
 
 const ButtonIcon = ({ type }) => {
-  if (type === ACTIONS.CLICK) {
+  if (type === "CLICK") {
     return <ClickIcon />;
-  } else if (type === ACTIONS.LINE) {
+  } else if (type === "LINE") {
     return <LineIcon />;
-  } else if (type === ACTIONS.CIRCLE) {
+  } else if (type === "CIRCLE") {
     return <CircleIcon />;
   } else {
     return <CurvedLineIcon />;
@@ -30,7 +30,7 @@ const Button = ({ type, isActive, onClick }) => (
 const TopBar = ({ action, setAction }) => {
   const handleOnClick = (selectedAction) => {
     if (action === selectedAction) {
-      setAction(ACTIONS.CLICK);
+      setAction(ACTION_TYPES.CLICK);
     } else {
       setAction(selectedAction);
     }
@@ -40,12 +40,12 @@ const TopBar = ({ action, setAction }) => {
       <div className="min-w-0 p-2 flex flex-col justify-center items-center bg-white rounded-sm shadow">
         <div className="w-100 flex flex-row items-center">
           <h1 className="font-bold text-gray-500">IAC</h1>
-          {Object.values(ACTIONS).map((actionType) => (
+          {ACTION_TYPES.map(({ id }) => (
             <Button
-              key={actionType}
-              onClick={() => handleOnClick(actionType)}
-              isActive={action === actionType}
-              type={actionType}
+              key={id}
+              onClick={() => handleOnClick(id)}
+              isActive={action === id}
+              type={id}
             />
           ))}
         </div>
